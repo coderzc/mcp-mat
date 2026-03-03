@@ -44,11 +44,57 @@ Optional:
 ```bash
 npm install
 npm run build
-MAT_ALLOWED_ROOTS=/absolute/heap/dir MAT_HOME=/path/to/mat npm start
+MAT_ALLOWED_ROOTS=/absolute/heap/dir MAT_HOME=/path/to/mat node dist/src/server.js
 ```
 
 ## Test
 
 ```bash
 npm test
+```
+
+## Install In Codex
+
+Build first:
+
+```bash
+cd /Users/lipenghui/Github/mcp-mat
+npm install
+npm run build
+```
+
+Add MCP server to Codex:
+
+```bash
+codex mcp add \
+  --env MAT_ALLOWED_ROOTS=/ABS/PATH/TO/HEAP_DUMPS \
+  --env MAT_HOME=/Applications/MemoryAnalyzer.app/Contents/Eclipse \
+  mat \
+  node /Users/lipenghui/Github/mcp-mat/dist/src/server.js
+```
+
+Verify:
+
+```bash
+codex mcp list
+codex mcp get mat --json
+```
+
+If you need to update the entry:
+
+```bash
+codex mcp remove mat
+# then run codex mcp add ... again
+```
+
+Equivalent `~/.codex/config.toml` entry:
+
+```toml
+[mcp_servers.mat]
+command = "node"
+args = ["/Users/lipenghui/Github/mcp-mat/dist/src/server.js"]
+
+[mcp_servers.mat.env]
+MAT_ALLOWED_ROOTS = "/ABS/PATH/TO/HEAP_DUMPS"
+MAT_HOME = "/Applications/MemoryAnalyzer.app/Contents/Eclipse"
 ```
